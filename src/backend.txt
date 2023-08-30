@@ -1,0 +1,90 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract CashLess {
+
+    address  authority;
+    
+    struct Person {
+        string name;
+        string class;
+        uint balance;
+        bool created;
+    }
+    mapping (address => Person)  personDetails;
+
+    constructor (string memory _name) {
+        authority = msg.sender;
+
+        createAccount(_name, "Authority");
+    }
+
+    function addMoney (uint _amount) public {
+        require(msg.sender == authority, "You cannot add tokens to authority account");
+        personDetails[authority].balance = _amount;
+    }
+
+    function createAccount (string memory _name, string memory _class) public {
+
+        require(personDetails[msg.sender].created == false,"You already have an account.");
+        personDetails[msg.sender] = Person({
+            name: _name,
+            class: _class,
+            balance: personDetails[msg.sender].balance,
+            created : true
+        });
+    }
+
+    function transfer (address _from, address _to, uint _amount) internal {
+        personDetails[_from].balance -= _amount;
+        personDetails[_to].balance += _amount;
+    }
+
+    function setBalance (address _address, uint _amount) public {
+        require(msg.sender==authority, "Only Authority can give tokens");
+        require(personDetails[msg.sender].balance >= _amount, "You don't have sufficient balance. Pelease add tokens.");
+        require(personDetails[_address].created == true, "Account not created yet.");
+        transfer(authority, _address, _amount);
+    }
+
+    function makePayment (address _seller, uint _amount) external {
+        require(personDetails[msg.sender].balance >= _amount, "You don't have sufficient balance to payment. Please add tokens.");
+        require(personDetails[_seller].created == true, "Account not created yet.");
+        transfer(msg.sender, _seller, _amount);
+    }
+
+    function withDraw (uint _amount) external {
+        require(personDetails[msg.sender].balance >= _amount, "You don't have sufficient balance to withdraw.");
+        require(msg.sender != authority, "Authority can't withdraw.");
+        transfer(msg.sender, authority, _amount);
+    }
+
+    function getBalance () public view returns (uint) {
+        
+        return personDetails[msg.sender].balance;
+    }
+
+    function Details (address _address) public view returns (string memory, string memory) {
+        return (
+            personDetails[_address].name,
+            personDetails[_address].class
+        );
+    }
+    function authorityDetails () public view returns (string memory, string memory, address) {
+         return (
+            personDetails[authority].name,
+            personDetails[authority].class,
+           authority
+        );
+    }
+
+    function loginCheck (address addr) external view returns (string memory) {
+        if (addr == authority) {
+            return "athority";
+        }
+        if (personDetails[addr].created == true) {
+            return "user";
+        }
+        return "notUser";
+    }
+}
