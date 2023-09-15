@@ -132,7 +132,13 @@ const Login = () => {
       setLoading(true)
       const senderBalance = parseFloat(balance);
       if (senderBalance < parseFloat(paymentInfo.amount)) {
-        alert("Not Enough Money")
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Not Enough Money",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         setErrorMessage("You don't have sufficient balance to make the payment.");
         setLoading(false)
         return;
@@ -143,11 +149,23 @@ const Login = () => {
         .call({ from: account });
       setBalance(userBalance);
       setLoading(false)
-      alert("Payment successful!")
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Payment Successfull",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       setSuccessMessage('Payment successful!');
     }
-
     catch (error) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "An error occurred while processing the payment.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       setErrorMessage('An error occurred while processing the payment.');
       setLoading(false);
       console.error(error);
@@ -163,15 +181,33 @@ const Login = () => {
     try {
       if (totalBalance < withdrawBalance) {
         setLoading(false)
-        return alert("Not Sufficient Money")
+        return  Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Not Sufficient Money",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
       await contract.methods.withDraw(withdrawBalance).send({ from: account });
       setLoading(false)
-      alert("Withdraw Successfull")
+       Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Withdraw Successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
     catch (error) {
       setLoading(false)
-      console.error(error);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title:`${error}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   }
 
@@ -196,6 +232,15 @@ const Login = () => {
     setLoading(true)
       const sendingAmount=parseFloat(info.sendBalance);
       const sendingAddress=info.userAccount;
+      if(sendingAmount> balance){
+        return Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Insufficient Balance",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
       try{
         await contract.methods.setBalance(sendingAddress, sendingAmount).send({ from:account});
         const Balance = await contract.methods
@@ -214,6 +259,16 @@ const Login = () => {
     setLoading(true)
       const payAmount=parseFloat(info.makePaymentAmount);
       const payAddress=info.userAccountforMakePayment;
+
+      if(payAmount> balance){
+        return Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Insufficient Balance",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
 
       try{
         await contract.methods.makePayment(payAddress, payAmount).send({ from: account });
@@ -370,7 +425,6 @@ const Login = () => {
           >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
-
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
@@ -620,7 +674,6 @@ const Login = () => {
           </div>
         </Dialog>
       </Transition>
-
 
     </div>
   );
