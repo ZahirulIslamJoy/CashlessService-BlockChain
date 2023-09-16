@@ -184,11 +184,10 @@ export const contactId = "0x204Da9Aa083E6070629c66CE1591c760dbC26422";
 		  icon: "error",
 		  title: "Please Install MetaMask First",
 		  showConfirmButton: false,
-		  timer: 1000,
+		  timer: 200,
 		}).then(() => {
 		  window.location.href = "/";
 		});
-		return;
 	  }
 	  
 
