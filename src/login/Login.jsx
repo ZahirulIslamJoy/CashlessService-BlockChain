@@ -27,7 +27,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true)
     const initialization = initializeWeb3();
     initialization
       .then((result) => {
@@ -37,7 +36,6 @@ const Login = () => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        setLoading(false)
       });
     async function checkLogin() {
       try {
@@ -51,19 +49,17 @@ const Login = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          setLoading(false)
           navigate("/registration");
         }
         setUserType(result);
       } catch (error) {
         console.error("Error:", error);
-        setLoading(false)
       }
     }
     if (account) {
       checkLogin();
     }
-  }, [account]);
+  }, [account,navigate,contract?.methods]);
 
   useEffect(() => {
     async function getDetails() {
@@ -190,6 +186,10 @@ const Login = () => {
         });
       }
       await contract.methods.withDraw(withdrawBalance).send({ from: account });
+      const userBalance = await contract.methods
+        .getBalance()
+        .call({ from: account });
+      setBalance(userBalance);
       setLoading(false)
        Swal.fire({
         position: "top-end",

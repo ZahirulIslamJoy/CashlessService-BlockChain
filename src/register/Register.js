@@ -196,12 +196,11 @@ const Register = () => {
   // 	}
   // ]
 
-  const contact = CashLessContract;
   const id = contactId;
   console.log(id);
 
   useEffect(() => {
-    setLoading(true)
+    // setLoading(true)
     const initialization = initializeWeb3();
     initialization
       .then((result) => {
@@ -209,11 +208,11 @@ const Register = () => {
         setAccount(result.account);
         setWeb3(result.web3Instance);
         setContract(result.contractInstance);
-        setLoading(false)
+        // setLoading(false)
       })
       .catch((error) => {
         console.error("Error:", error);
-        setLoading(false)
+        // setLoading(false)
       });
   }, []);
 

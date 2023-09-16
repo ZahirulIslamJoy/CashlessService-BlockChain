@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 const HomePage = () => {
   const [account, setAccount] = useState(null);
 
-//   const contactId = "0xeccA881c787E8ef46e2618CE1ef2B1C0CD5eEeb3";
+  const contactId = "0xeccA881c787E8ef46e2618CE1ef2B1C0CD5eEeb3";
 
 
   // const connectToMetamask = async () => {
