@@ -55,7 +55,7 @@ const HomePage = () => {
           </button>
         </div> */}
         <div className="py-2 px-1 w-[120px] rounded-xl bg-blue-700">
-          <Link to="/login" ><button>Login</button></Link>
+          <Link to="/dashboard" ><button>Dashboard</button></Link>
         </div>
         <div className="py-2 px-1  w-[120px] rounded-xl bg-blue-700">
           <Link to="/registration"><button>Registration</button></Link>

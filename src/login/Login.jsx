@@ -289,7 +289,7 @@ const Login = () => {
       {
         loading ? <div><Loader></Loader> </div> : <div>
         {userType == "user" && (
-          <div className="pt-20 flex flex-col items-center justify-center ">
+          <div className="pt-32 flex flex-col items-center justify-center ">
             <h1>
               <span className="mb-2">Name:</span> {name}
             </h1>

@@ -201,6 +201,7 @@ const Register = () => {
   console.log(id);
 
   useEffect(() => {
+    setLoading(true)
     const initialization = initializeWeb3();
     initialization
       .then((result) => {
@@ -208,9 +209,11 @@ const Register = () => {
         setAccount(result.account);
         setWeb3(result.web3Instance);
         setContract(result.contractInstance);
+        setLoading(false)
       })
       .catch((error) => {
         console.error("Error:", error);
+        setLoading(false)
       });
   }, []);
 
@@ -267,7 +270,7 @@ const Register = () => {
         </div>
       ) : (
         <div>
-          <div className="text-3xl text-center pt-12">Please Register Here</div>
+          <div className="text-3xl text-center pt-32">Please Register Here</div>
           <div className="w-1/2  pt-12 mx-auto">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="">
